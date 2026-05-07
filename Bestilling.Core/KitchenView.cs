@@ -28,8 +28,8 @@ namespace Bestilling.Core
                 if (order.TableID == tableId)
                 {
                     ended = true;
-                    current_orders.Remove(order);
                     cashierView.receiveOrder(order);
+                    current_orders.Remove(order);
                     break;
                 }
             }
