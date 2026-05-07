@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../Bestilling.Core/Bestilling.Core.csproj" />
+  <Project Path="Bestilling.ConsoleApp.csproj" />
+</Solution>
