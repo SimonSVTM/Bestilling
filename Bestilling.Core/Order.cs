@@ -21,6 +21,11 @@ namespace Bestilling.Core
             orders.Add(menuItem);
         }
 
+        public double totalPrice()
+        {
+            return orders.Sum(item => item.Price);
+        }
+
         override
         public string ToString()
         {

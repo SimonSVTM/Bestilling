@@ -20,7 +20,7 @@ namespace Bestilling.Core
             current_orders.Add(order);
         }
 
-        public void endOrder(int tableId)
+        public bool endOrder(int tableId)
         {
             bool ended = false;
             foreach (Order order in current_orders) 
@@ -33,10 +33,7 @@ namespace Bestilling.Core
                     break;
                 }
             }
-            if (!ended) 
-            {
-                Console.WriteLine("Order ikke fundet!");
-            }
+            return ended;
         }
 
         public void printCurrentOrders()
@@ -51,6 +48,52 @@ namespace Bestilling.Core
         public int getNumberOftables()
         {
             return cashierView.getNumberOfTables();
+        }
+
+        public void Start()
+        {
+            bool running = true;
+
+            while (running)
+            {
+                Console.WriteLine("=== Kitchen View ===");
+                Console.WriteLine("1. Vis Bestillinger");
+                Console.WriteLine("2. Afslut Bestilling");
+                Console.WriteLine("0. Exit");
+                Console.Write("Choose: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        printCurrentOrders();
+                        Console.WriteLine("Tryk Enter for at afslutte.");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+
+                    case "2":
+                        Console.WriteLine("Bordnummer:");
+                        int tableid = int.Parse(Console.ReadLine());
+                        bool ended = endOrder(tableid);
+                        Console.Clear();
+                        if (ended)
+                            Console.WriteLine($"Bordnummer {tableid} sendt til afregning.");
+                        else
+                            Console.WriteLine($"Bordnummer {tableid} har ingen bestillinger.");
+                        break;
+
+                    case "0":
+                        running = false;
+                        Console.Clear();
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid choice.");
+                        Console.ReadKey();
+                        break;
+                }
+            }
         }
     }
 }

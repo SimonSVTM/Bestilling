@@ -45,5 +45,12 @@ namespace Bestilling.Core
         {
             _menuitems.RemoveAll(p => p.Id == id);
         }
+
+        public IEnumerable<MenuItem> SearchByName(string search)
+        {
+            return _menuitems
+                .Where(item => item.Name.Contains(search,
+                    StringComparison.OrdinalIgnoreCase));
+        }
     }
 }

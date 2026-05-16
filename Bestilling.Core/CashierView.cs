@@ -13,6 +13,7 @@ namespace Bestilling.Core
             this.numberOftables = numberOftables;
         }
 
+
         public int getNumberOfTables()
         {
             return numberOftables; 
@@ -23,21 +24,72 @@ namespace Bestilling.Core
             preparedOrders.Add(order);
         }
 
-        public void finishOrder(int tableId)
+        public bool finishOrder(int tableId)
         {
             bool ended = false;
             foreach (Order order in preparedOrders)
             {
                 if (order.TableID == tableId)
                 {
-                    ended = true;
-                    preparedOrders.Remove(order);
+                    
+                    bool payed = credit(order);
+                    if (payed)
+                    {
+                        preparedOrders.Remove(order);
+                        ended = true;
+                    }
                     break;
                 }
             }
-            if (!ended)
+            return ended;
+        }
+
+        private bool credit(Order order)
+        {
+            double totalPrice = order.totalPrice();
+            Console.WriteLine($"Total price is {totalPrice}");
+            Console.WriteLine("Pay now? [Y/N]");
+            string ans = Console.ReadLine();
+            return (ans.Equals("Y")) ;
+                
+        }
+
+        public void Start()
+        {
+            bool running = true;
+
+            while (running)
             {
-                Console.WriteLine("Ordre ikke fundet!");
+                Console.WriteLine("=== Cashier View ===");
+                Console.WriteLine("1. Afslut bord");
+                Console.WriteLine("0. Exit");
+                Console.Write("Choose: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        Console.WriteLine("Bordnummer:");
+                        int tableid = int.Parse(Console.ReadLine());
+                        bool ended = finishOrder(tableid);
+                        Console.Clear();
+                        if (ended)
+                            Console.WriteLine($"Bordnummer {tableid} afregnet.");
+                        else
+                            Console.WriteLine($"Bordnummer {tableid} ikke afregnet.");
+                        break;
+
+                    case "0":
+                        running = false;
+                        Console.Clear();
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid choice.");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                }
             }
         }
     }
