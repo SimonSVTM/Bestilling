@@ -70,7 +70,6 @@ namespace Bestilling.ConsoleApp
                 }
             }
 
-                Console.WriteLine("Hello, World!");
         }
     }
 }
