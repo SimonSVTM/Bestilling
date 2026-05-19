@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Bestilling.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Bestilling.Core
+namespace Bestilling.Core.Repositories
 {
     public class InMemoryMenuRepository : IMenuRepository
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Bestilling.Core
+namespace Bestilling.Core.Models
 {
     public class CashierView
     {
@@ -24,7 +24,7 @@ namespace Bestilling.Core
             preparedOrders.Add(order);
         }
 
-        public bool finishOrder(int tableId)
+        private bool finishOrder(int tableId)
         {
             bool ended = false;
             foreach (Order order in preparedOrders)
@@ -85,9 +85,9 @@ namespace Bestilling.Core
                         break;
 
                     default:
-                        Console.WriteLine("Invalid choice.");
-                        Console.ReadKey();
                         Console.Clear();
+                        Console.WriteLine("Invalid choice.");
+                        
                         break;
                 }
             }

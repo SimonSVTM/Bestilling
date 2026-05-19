@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Bestilling.Core.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Bestilling.Core
+namespace Bestilling.Core.Models
 {
     public class WaiterView
     {
         private KitchenView kitchenView;
         private Order current_order = new Order(0);
         private InMemoryMenuRepository menu;
+        private bool startedNewOrder = false;
         public WaiterView(KitchenView kitchenView, InMemoryMenuRepository menu)
         {
             this.kitchenView = kitchenView;
@@ -20,6 +22,7 @@ namespace Bestilling.Core
             if (0 < tableId && tableId <= kitchenView.getNumberOftables())
             {
                 current_order = new Order(tableId);
+                startedNewOrder = true;
             }
             else 
             {
@@ -30,12 +33,16 @@ namespace Bestilling.Core
 
         private void addToOrder(MenuItem menuItem) 
         {
+            
             current_order.addMenuItem(menuItem);
+            
+            
         }
 
         private void sendOrderToKitchen()
         {
             kitchenView.recieveOrder(current_order);
+            startedNewOrder = false;
         }
 
         public void Start()
@@ -64,20 +71,35 @@ namespace Bestilling.Core
                         Console.WriteLine("Bestilling oprettet.");
                         break;
                     case "2":
-                        Console.WriteLine("Søgefelt: ");
-                        string order = Console.ReadLine();
-                        int i = 0;
-                        IEnumerable<MenuItem> list = menu.SearchByName(order);
-                        foreach (MenuItem m in list)
+                        if (startedNewOrder)
                         {
-                            Console.WriteLine((i + 1).ToString() + ": " + m.Name);
-                            i += 1;
+                            Console.WriteLine("Søgefelt: ");
+                            string order = Console.ReadLine();
+                            int i = 0;
+                            IEnumerable<MenuItem> list = menu.SearchByName(order);
+                            foreach (MenuItem m in list)
+                            {
+                                Console.WriteLine((i + 1).ToString() + ": " + m.Name);
+                                i += 1;
+                            }
+                            Console.WriteLine("Vælg menu:");
+                            // 3. Brug int.TryParse i stedet for int.Parse for at undgå crash ved bogstaver
+                            if (int.TryParse(Console.ReadLine(), out int j) && j > 0 && j <= list.Count())
+                            {
+                                addToOrder(list.ElementAt(j - 1));
+                                Console.Clear();
+                                Console.WriteLine("Tilføjet til bestilling.");
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Ugyldigt valg. Menuen blev ikke tilføjet.");
+                            }
                         }
-                        Console.WriteLine("Vælg menu:");
-                        int j = int.Parse(Console.ReadLine());
-                        addToOrder(list.ElementAt(j - 1));
-                        Console.Clear();
-                        Console.WriteLine("Tilføjet til bestilling.");
+                        else { 
+                            Console.Clear();
+                            Console.WriteLine("Ny bestilling ikke startet.");
+                        }
                         break;
                     case "3":
                         sendOrderToKitchen();
@@ -91,9 +113,9 @@ namespace Bestilling.Core
                         break;
 
                     default:
-                        Console.WriteLine("Invalid choice.");
-                        Console.ReadKey();
                         Console.Clear();
+                        Console.WriteLine("Invalid choice.");
+                        
                         break;
                 }
 

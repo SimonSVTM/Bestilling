@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Bestilling.Core
+namespace Bestilling.Core.Models
 {
    
     public class Order

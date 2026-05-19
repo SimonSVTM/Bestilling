@@ -1,4 +1,5 @@
-﻿using Bestilling.Core;
+﻿using Bestilling.Core.Models;
+using Bestilling.Core.Repositories;
 
 namespace Bestilling.ConsoleApp
 {
@@ -26,7 +27,6 @@ namespace Bestilling.ConsoleApp
 
             while (running)
             {
-                Console.Clear();
 
                 Console.WriteLine("=== Restaurant System ===");
                 Console.WriteLine("1. Waiter View");
@@ -42,19 +42,19 @@ namespace Bestilling.ConsoleApp
                     case "1":
                         Console.Clear();
                         Console.WriteLine("Opening Waiter View...");
-                        wview.Start(); // or wview.Run()
+                        wview.Start();
                         break;
 
                     case "2":
                         Console.Clear();
                         Console.WriteLine("Opening Kitchen View...");
-                        kview.Start(); // or kview.Run()
+                        kview.Start(); 
                         break;
 
                     case "3":
                         Console.Clear();
                         Console.WriteLine("Opening Cashier View...");
-                        cview.Start(); // or cview.Run()
+                        cview.Start(); 
                         break;
 
                     case "0":
@@ -63,9 +63,9 @@ namespace Bestilling.ConsoleApp
                         break;
 
                     default:
-                        Console.WriteLine("Invalid choice.");
-                        Console.ReadKey();
                         Console.Clear();
+                        Console.WriteLine("Invalid choice.");
+                       
                         break;
                 }
             }

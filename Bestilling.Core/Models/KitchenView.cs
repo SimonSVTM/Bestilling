@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Bestilling.Core
+namespace Bestilling.Core.Models
 {
     
     public class KitchenView
@@ -20,7 +20,7 @@ namespace Bestilling.Core
             current_orders.Add(order);
         }
 
-        public bool endOrder(int tableId)
+        private bool endOrder(int tableId)
         {
             bool ended = false;
             foreach (Order order in current_orders) 
@@ -36,7 +36,7 @@ namespace Bestilling.Core
             return ended;
         }
 
-        public void printCurrentOrders()
+        private void printCurrentOrders()
         {
             foreach (Order order in current_orders)
             {
@@ -89,8 +89,9 @@ namespace Bestilling.Core
                         break;
 
                     default:
+                        Console.Clear();
                         Console.WriteLine("Invalid choice.");
-                        Console.ReadKey();
+                        
                         break;
                 }
             }
