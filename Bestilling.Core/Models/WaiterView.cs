@@ -52,7 +52,7 @@ namespace Bestilling.Core.Models
                 
 
                 Console.WriteLine("=== Waiter View ===");
-                Console.WriteLine("1. Start bestilling");
+                Console.WriteLine("1. Start ny bestilling");
                 Console.WriteLine("2. Søg og tilføj Menu");
                 Console.WriteLine("3. Send til køkken");
                 Console.WriteLine("4. Log af");
@@ -109,9 +109,17 @@ namespace Bestilling.Core.Models
                         }
                         break;
                     case "3":
-                        sendOrderToKitchen();
-                        Console.Clear();
-                        Console.WriteLine("Sendt til køkken.");
+                        if (startedNewOrder)
+                        {
+                            sendOrderToKitchen();
+                            Console.Clear();
+                            Console.WriteLine("Sendt til køkken.");
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Ny bestilling ikke startet.");
+                        }
                         break;
                     case "4":
                         
