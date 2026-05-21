@@ -12,10 +12,11 @@ namespace Bestilling.Core.Models
         private Order current_order = new Order(0);
         private InMemoryMenuRepository menu;
         private bool startedNewOrder = false;
-        public WaiterView(KitchenView kitchenView, InMemoryMenuRepository menu)
+        public WaiterView(KitchenView kitchenView, InMemoryMenuRepository menu, string name)
         {
             this.kitchenView = kitchenView;
             this.menu = menu;
+            waiterName = name;
         }
 
         private void startNewOrder()
@@ -41,9 +42,9 @@ namespace Bestilling.Core.Models
             startedNewOrder = false;
         }
 
-        public bool Start(string name)
+        public bool Start()
         {
-            waiterName = name;
+            
             bool running = true;
             bool loggedIn = true;
             while(running)

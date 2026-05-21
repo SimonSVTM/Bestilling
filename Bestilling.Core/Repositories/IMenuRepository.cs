@@ -9,8 +9,8 @@ namespace Bestilling.Core.Repositories
     {
         MenuItem GetById(int id);
         IEnumerable<MenuItem> GetAll();
-        void Add(MenuItem person);
-        void Update(MenuItem person);
+        void Add(MenuItem menuItem);
+        void Update(MenuItem menuItem);
         void Delete(int id);
     }
 }

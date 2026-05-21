@@ -23,7 +23,7 @@ namespace Bestilling.ConsoleApp
             
             CashierView cview = new CashierView(numberOftables);
             KitchenView kview = new KitchenView(cview);
-            WaiterView wview = new WaiterView(kview, menu);
+            WaiterView wview;
 
             bool running = true;
 
@@ -49,10 +49,12 @@ namespace Bestilling.ConsoleApp
                             name = Console.ReadLine();
                         if (loggedIn || acceptedWaiterNames.Contains(name))
                         {
+                            wview = new WaiterView(kview, menu, name);
                             loggedIn = true;
                             Console.Clear();
                             Console.WriteLine("Opening Waiter View...");
-                            loggedIn = wview.Start(name);
+                            loggedIn = wview.Start();
+
                         }
                         else
                         {
