@@ -9,30 +9,62 @@ namespace Bestilling.Core.Models
     {
         private List<Order> current_orders = new List<Order>();
         private CashierView cashierView;
-        public KitchenView(CashierView cashierView) 
+        private Dictionary<int, string> waiterAssignments = new Dictionary<int, string>();
+        public Dictionary<int, string> WaiterAssignments { get => waiterAssignments; }
+        private int numberOfTables;
+        public int NumberOfTables { get => numberOfTables; }
+        public KitchenView(int numberOfTables) 
         { 
-            this.cashierView = cashierView;
+            this.numberOfTables = numberOfTables;
         }
 
-        public void recieveOrder(Order order)
+        public void recieveOrder(Order current_order)
         {
-            current_orders.Add(order);
+            if(!current_orders.Any(order => order.TableID == current_order.TableID))
+                current_orders.Add(current_order);
         }
 
-        private bool endOrder(int tableId)
+        public void assignWaiter(int tableID, string waiterName)
         {
-            bool ended = false;
-            foreach (Order order in current_orders) 
+            if (tableID > 0 && tableID <= numberOfTables)
             {
-                if (order.TableID == tableId)
+                waiterAssignments[tableID] = waiterName;
+                Console.WriteLine("Opgave Oprettet.");
+            }
+            else
+            {
+                Console.WriteLine("Ugyldigt bordtal givet.");
+            }
+        }
+
+        public Order findOrder(int tableID)
+        {
+            Order final = null;
+            if (tableID > 0 && tableID <= numberOfTables)
+            {
+                foreach (Order order in current_orders)
                 {
-                    ended = true;
-                    cashierView.receiveOrder(order);
-                    current_orders.Remove(order);
-                    break;
+                    if (order.TableID == tableID)
+                    {
+                        final = order;
+                        break;
+                    }
                 }
             }
-            return ended;
+            return final;
+        }
+        
+
+        public bool endOrder(Order order)
+        {
+           
+            if (order != null)
+            {
+                waiterAssignments.Remove(order.TableID);
+                current_orders.Remove(order);
+                return true;
+            }
+            return false;
         }
 
         private void printCurrentOrders()
@@ -45,20 +77,20 @@ namespace Bestilling.Core.Models
 
         private void printWaiterAssignments()
         {
-            Dictionary<int, string> assignments = cashierView.WaiterAssignments;
+            Dictionary<int, string> assignments = waiterAssignments;
             foreach ((int tableID, string waitername) in assignments)
                 Console.WriteLine($"{waitername} betjener bord {tableID}");
         }
 
         public int getWaiterAssignment(string name)
         {
-            return cashierView.WaiterAssignments.First(x => x.Value.Equals(name)).Key;
+            return waiterAssignments.First(x => x.Value.Equals(name)).Key;
         }
 
 
         public int getNumberOftables()
         {
-            return cashierView.NumberOfTables;
+            return numberOfTables;
         }
 
         public void Start()
@@ -69,8 +101,7 @@ namespace Bestilling.Core.Models
             {
                 Console.WriteLine("=== Kitchen View ===");
                 Console.WriteLine("1. Vis Bestillinger");
-                Console.WriteLine("2. Afslut Bestilling");
-                Console.WriteLine("3. Vis Tjener Opgaver");
+                Console.WriteLine("2. Vis Tjener Opgaver");
                 Console.WriteLine("0. Exit");
                 Console.Write("Choose: ");
                 string choice = Console.ReadLine();
@@ -83,19 +114,7 @@ namespace Bestilling.Core.Models
                         Console.ReadKey();
                         Console.Clear();
                         break;
-
                     case "2":
-                        Console.WriteLine("Bordnummer:");
-                        int tableid = int.Parse(Console.ReadLine());
-                        bool ended = endOrder(tableid);
-                        Console.Clear();
-                        if (ended)
-                            Console.WriteLine($"Bordnummer {tableid} sendt til afregning.");
-                        else
-                            Console.WriteLine($"Bordnummer {tableid} har ingen bestillinger.");
-                        break;
-
-                    case "3":
                         Console.WriteLine("");
                         printWaiterAssignments();
                         Console.WriteLine("Tryk Enter for at afslutte.");

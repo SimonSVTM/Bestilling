@@ -6,55 +6,36 @@ namespace Bestilling.Core.Models
 {
     public class CashierView
     {
-        private int numberOfTables;
-        public int NumberOfTables { get => numberOfTables;  }
-        private List<Order> preparedOrders = new List<Order>();
+        
 
-        private Dictionary<int, string> waiterAssignments = new Dictionary<int, string>();
-        public Dictionary<int, string> WaiterAssignments { get => waiterAssignments; }
-        public CashierView(int numberOfTables) 
+        private KitchenView kitchenView;
+
+        
+        public CashierView(KitchenView kitchenView) 
         { 
-            this.numberOfTables = numberOfTables;
+            this.kitchenView = kitchenView;
+
         }
         
 
         private void assignWaiter(int tableId, string waiterName)
         {
-            if (tableId > 0 && tableId <= numberOfTables)
-            {
-                waiterAssignments[tableId] = waiterName;
-                Console.WriteLine("Opgave Oprettet.");
-            }
-            else
-            {
-                Console.WriteLine("Ugyldigt bordtal givet.");
-            }
+            kitchenView.assignWaiter(tableId, waiterName);
         }
 
-        public void receiveOrder(Order order)
-        {
-            preparedOrders.Add(order);
-        }
 
-        private bool finishOrder(int tableId)
+        private bool finishOrder(int tableID)
         {
-            bool ended = false;
-            foreach (Order order in preparedOrders)
+            Order order = kitchenView.findOrder(tableID);
+            if (order != null)
             {
-                if (order.TableID == tableId)
+                if (credit(order))
                 {
-                    
-                    bool payed = credit(order);
-                    if (payed)
-                    {
-                        waiterAssignments.Remove(order.TableID);
-                        preparedOrders.Remove(order);
-                        ended = true;
-                    }
-                    break;
+                    kitchenView.endOrder(order);
+                    return true;
                 }
             }
-            return ended;
+            return false;
         }
 
         private bool credit(Order order)

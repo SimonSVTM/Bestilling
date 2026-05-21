@@ -24,8 +24,17 @@ namespace Bestilling.Core.Models
             
             current_order = new Order(kitchenView.getWaiterAssignment(waiterName));
             startedNewOrder = true;
-            
-            
+        }
+
+        private bool editOrder(int tableID)
+        {
+            Order order = kitchenView.findOrder(tableID);
+            if (order != null) {
+                current_order = order;
+                startedNewOrder = true;
+                return true;
+            }
+            return false;
         }
 
         private void addToOrder(MenuItem menuItem) 
@@ -53,9 +62,10 @@ namespace Bestilling.Core.Models
 
                 Console.WriteLine("=== Waiter View ===");
                 Console.WriteLine("1. Start ny bestilling");
-                Console.WriteLine("2. Søg og tilføj Menu");
-                Console.WriteLine("3. Send til køkken");
-                Console.WriteLine("4. Log af");
+                Console.WriteLine("2. Rediger Bestilling");
+                Console.WriteLine("3. Søg og tilføj Menu");
+                Console.WriteLine("4. Send til køkken");
+                Console.WriteLine("5. Log af");
                 Console.WriteLine("0. Exit");
                 Console.Write("Choose: ");
                 string choice = Console.ReadLine();
@@ -77,7 +87,17 @@ namespace Bestilling.Core.Models
                         
                         
                         break;
+
                     case "2":
+                        Console.WriteLine("Indtast bord nummer:");
+                        int tableID = int.Parse(Console.ReadLine());
+                        Console.Clear();
+                        if (editOrder(tableID))
+                            Console.WriteLine($"Bord {tableID}'s bestilling redigeres nu");
+                        else
+                            Console.WriteLine($"Bestlling til bord {tableID} ikke fundet.");
+                        break;
+                    case "3":
                         if (startedNewOrder)
                         {
                             Console.WriteLine("Søgefelt: ");
@@ -108,7 +128,7 @@ namespace Bestilling.Core.Models
                             Console.WriteLine("Ny bestilling ikke startet.");
                         }
                         break;
-                    case "3":
+                    case "4":
                         if (startedNewOrder)
                         {
                             sendOrderToKitchen();
@@ -121,7 +141,7 @@ namespace Bestilling.Core.Models
                             Console.WriteLine("Ny bestilling ikke startet.");
                         }
                         break;
-                    case "4":
+                    case "5":
                         
                         Console.Clear();
                         running = false;

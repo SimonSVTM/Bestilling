@@ -20,9 +20,9 @@ namespace Bestilling.ConsoleApp
             
             
             int numberOftables = 10;
-            
-            CashierView cview = new CashierView(numberOftables);
-            KitchenView kview = new KitchenView(cview);
+
+            KitchenView kview = new KitchenView(numberOftables);
+            CashierView cview = new CashierView(kview);
             WaiterView wview;
 
             bool running = true;
