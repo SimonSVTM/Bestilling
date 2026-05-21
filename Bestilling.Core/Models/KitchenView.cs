@@ -82,16 +82,11 @@ namespace Bestilling.Core.Models
                 Console.WriteLine($"{waitername} betjener bord {tableID}");
         }
 
-        public int getWaiterAssignment(string name)
+        public int getLatestWaiterAssignment(string name)
         {
-            return waiterAssignments.First(x => x.Value.Equals(name)).Key;
+            return waiterAssignments.Last(x => x.Value.Equals(name)).Key;
         }
 
-
-        public int getNumberOftables()
-        {
-            return numberOfTables;
-        }
 
         public void Start()
         {

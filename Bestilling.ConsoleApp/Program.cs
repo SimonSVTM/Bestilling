@@ -26,6 +26,7 @@ namespace Bestilling.ConsoleApp
             WaiterView wview;
 
             bool running = true;
+            string name = "";
 
             while (running)
             {
@@ -43,14 +44,15 @@ namespace Bestilling.ConsoleApp
                 {
                     case "1":
 
-                        string name;
+
                         if (!loggedIn)
+                        {
                             Console.WriteLine("Indtast navn på tjener:");
                             name = Console.ReadLine();
+                        }
                         if (loggedIn || acceptedWaiterNames.Contains(name))
                         {
                             wview = new WaiterView(kview, menu, name);
-                            loggedIn = true;
                             Console.Clear();
                             Console.WriteLine("Opening Waiter View...");
                             loggedIn = wview.Start();

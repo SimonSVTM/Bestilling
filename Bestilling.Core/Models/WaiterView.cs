@@ -22,7 +22,7 @@ namespace Bestilling.Core.Models
         private void startNewOrder()
         {
             
-            current_order = new Order(kitchenView.getWaiterAssignment(waiterName));
+            current_order = new Order(kitchenView.getLatestWaiterAssignment(waiterName));
             startedNewOrder = true;
         }
 
@@ -61,6 +61,7 @@ namespace Bestilling.Core.Models
                 
 
                 Console.WriteLine("=== Waiter View ===");
+                Console.WriteLine($"Navn: {waiterName}");
                 Console.WriteLine("1. Start ny bestilling");
                 Console.WriteLine("2. Rediger Bestilling");
                 Console.WriteLine("3. Søg og tilføj Menu");
