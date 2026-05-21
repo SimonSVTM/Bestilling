@@ -7,6 +7,7 @@ namespace Bestilling.Core.Models
 {
     public class WaiterView
     {
+        private string waiterName;
         private KitchenView kitchenView;
         private Order current_order = new Order(0);
         private InMemoryMenuRepository menu;
@@ -17,17 +18,12 @@ namespace Bestilling.Core.Models
             this.menu = menu;
         }
 
-        private void startNewOrder(int tableId)
+        private void startNewOrder()
         {
-            if (0 < tableId && tableId <= kitchenView.getNumberOftables())
-            {
-                current_order = new Order(tableId);
-                startedNewOrder = true;
-            }
-            else 
-            {
-                Console.WriteLine("Ugyldigt bordtal givet.");
-            }
+            
+            current_order = new Order(kitchenView.getWaiterAssignment(waiterName));
+            startedNewOrder = true;
+            
             
         }
 
@@ -45,10 +41,11 @@ namespace Bestilling.Core.Models
             startedNewOrder = false;
         }
 
-        public void Start()
+        public bool Start(string name)
         {
+            waiterName = name;
             bool running = true;
-
+            bool loggedIn = true;
             while(running)
             {
                 
@@ -57,6 +54,7 @@ namespace Bestilling.Core.Models
                 Console.WriteLine("1. Start bestilling");
                 Console.WriteLine("2. Søg og tilføj Menu");
                 Console.WriteLine("3. Send til køkken");
+                Console.WriteLine("4. Log af");
                 Console.WriteLine("0. Exit");
                 Console.Write("Choose: ");
                 string choice = Console.ReadLine();
@@ -64,11 +62,19 @@ namespace Bestilling.Core.Models
                 switch (choice)
                 {
                     case "1":
-                        Console.WriteLine("Skriv bordnummer:");
-                        int tableid = int.Parse(Console.ReadLine());
-                        startNewOrder(tableid);
-                        Console.Clear();
-                        Console.WriteLine("Bestilling oprettet.");
+                        try
+                        {
+                            startNewOrder();
+                            Console.Clear();
+                            Console.WriteLine("Ny bestilling oprettet.");
+                        }
+                            catch (InvalidOperationException ex)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Opgaven er ikke blevet oprettet.");
+                        }
+                        
+                        
                         break;
                     case "2":
                         if (startedNewOrder)
@@ -106,6 +112,13 @@ namespace Bestilling.Core.Models
                         Console.Clear();
                         Console.WriteLine("Sendt til køkken.");
                         break;
+                    case "4":
+                        
+                        Console.Clear();
+                        running = false;
+                        loggedIn = false;
+                        Console.WriteLine("Logget af.");
+                        break;
 
                     case "0":
                         running = false;
@@ -120,7 +133,9 @@ namespace Bestilling.Core.Models
                 }
 
             }
+            return loggedIn;
         }
+
         
     }
 }

@@ -1,22 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Bestilling.Core.Models
 {
     public class CashierView
     {
-        private int numberOftables;
+        private int numberOfTables;
+        public int NumberOfTables { get => numberOfTables;  }
         private List<Order> preparedOrders = new List<Order>();
+
+        private Dictionary<int, string> waiterAssignments = new Dictionary<int, string>();
         public CashierView(int numberOftables) 
         { 
-            this.numberOftables = numberOftables;
+            this.numberOfTables = numberOfTables;
         }
 
+        public Dictionary<int, string> getWaiterAssignments()
+        {
+            return waiterAssignments; 
+        }
 
         public int getNumberOfTables()
         {
-            return numberOftables; 
+            return NumberOfTables; 
+        }
+
+        public void assignWaiter(int tableId, string waiterName)
+        {
+            if (tableId > 0 && tableId <= numberOfTables)
+            {
+                waiterAssignments[tableId] = waiterName;
+            }
+            else
+            {
+                Console.WriteLine("Ugyldigt bordtal givet.");
+            }
         }
 
         public void receiveOrder(Order order)
@@ -35,6 +55,7 @@ namespace Bestilling.Core.Models
                     bool payed = credit(order);
                     if (payed)
                     {
+                        waiterAssignments.Remove(order.TableID);
                         preparedOrders.Remove(order);
                         ended = true;
                     }
@@ -62,6 +83,7 @@ namespace Bestilling.Core.Models
             {
                 Console.WriteLine("=== Cashier View ===");
                 Console.WriteLine("1. Afslut bord");
+                Console.WriteLine("2. Opret Tjener Opgave");
                 Console.WriteLine("0. Exit");
                 Console.Write("Choose: ");
                 string choice = Console.ReadLine();
@@ -78,6 +100,17 @@ namespace Bestilling.Core.Models
                         else
                             Console.WriteLine($"Bordnummer {tableid} ikke afregnet.");
                         break;
+
+                    case "2":
+                        Console.WriteLine("Indtast Bord nummer:");
+                        int tableID = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Indstast Tjener navn:");
+                        string name = Console.ReadLine();
+                        waiterAssignments[tableID] = name;
+                        Console.Clear();
+                        Console.WriteLine("Opgave Oprettet.");
+                        break;
+
 
                     case "0":
                         running = false;

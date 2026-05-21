@@ -44,6 +44,18 @@ namespace Bestilling.Core.Models
             }
         }
 
+        private void printWaiterAssignment()
+        {
+            Dictionary<int, string> assignments = cashierView.getWaiterAssignments();
+            foreach ((int tableID, string waitername) in assignments)
+                Console.WriteLine($"{waitername} betjener bord {tableID}");
+        }
+
+        public int getWaiterAssignment(string name)
+        {
+            return cashierView.getWaiterAssignments().First(x => x.Value.Equals(name)).Key;
+        }
+
 
         public int getNumberOftables()
         {
@@ -59,6 +71,7 @@ namespace Bestilling.Core.Models
                 Console.WriteLine("=== Kitchen View ===");
                 Console.WriteLine("1. Vis Bestillinger");
                 Console.WriteLine("2. Afslut Bestilling");
+                Console.WriteLine("3. Vis Tjener Opgaver");
                 Console.WriteLine("0. Exit");
                 Console.Write("Choose: ");
                 string choice = Console.ReadLine();
@@ -83,6 +96,13 @@ namespace Bestilling.Core.Models
                             Console.WriteLine($"Bordnummer {tableid} har ingen bestillinger.");
                         break;
 
+                    case "3":
+                        Console.WriteLine("");
+                        printWaiterAssignment();
+                        Console.WriteLine("Tryk Enter for at afslutte.");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
                     case "0":
                         running = false;
                         Console.Clear();

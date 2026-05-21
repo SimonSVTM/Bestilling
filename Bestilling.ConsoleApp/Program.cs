@@ -14,7 +14,9 @@ namespace Bestilling.ConsoleApp
             menu.Add(m1);
             menu.Add(m2);
             menu.Add(m3);
-            
+            bool loggedIn = false;
+
+            List<string> acceptedWaiterNames = new List<string>() {"Bo", "Lars", "Knud", "Sara", "Mia"};
             
             
             int numberOftables = 10;
@@ -40,9 +42,24 @@ namespace Bestilling.ConsoleApp
                 switch (choice)
                 {
                     case "1":
-                        Console.Clear();
-                        Console.WriteLine("Opening Waiter View...");
-                        wview.Start();
+
+                        string name;
+                        if (!loggedIn)
+                            Console.WriteLine("Indtast navn på tjener:");
+                            name = Console.ReadLine();
+                        if (loggedIn || acceptedWaiterNames.Contains(name))
+                        {
+                            loggedIn = true;
+                            Console.Clear();
+                            Console.WriteLine("Opening Waiter View...");
+                            loggedIn = wview.Start(name);
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Forkert navn indtastet");
+                        }
+                        
                         break;
 
                     case "2":
