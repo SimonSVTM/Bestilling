@@ -12,26 +12,19 @@ namespace Bestilling.Core.Models
         private List<Order> preparedOrders = new List<Order>();
 
         private Dictionary<int, string> waiterAssignments = new Dictionary<int, string>();
-        public CashierView(int numberOftables) 
+        public Dictionary<int, string> WaiterAssignments { get => waiterAssignments; }
+        public CashierView(int numberOfTables) 
         { 
             this.numberOfTables = numberOfTables;
         }
+        
 
-        public Dictionary<int, string> getWaiterAssignments()
-        {
-            return waiterAssignments; 
-        }
-
-        public int getNumberOfTables()
-        {
-            return NumberOfTables; 
-        }
-
-        public void assignWaiter(int tableId, string waiterName)
+        private void assignWaiter(int tableId, string waiterName)
         {
             if (tableId > 0 && tableId <= numberOfTables)
             {
                 waiterAssignments[tableId] = waiterName;
+                Console.WriteLine("Opgave Oprettet.");
             }
             else
             {
@@ -106,9 +99,10 @@ namespace Bestilling.Core.Models
                         int tableID = int.Parse(Console.ReadLine());
                         Console.WriteLine("Indstast Tjener navn:");
                         string name = Console.ReadLine();
-                        waiterAssignments[tableID] = name;
+                        
                         Console.Clear();
-                        Console.WriteLine("Opgave Oprettet.");
+                        assignWaiter(tableID, name);
+                        
                         break;
 
 

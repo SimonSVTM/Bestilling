@@ -44,22 +44,22 @@ namespace Bestilling.Core.Models
             }
         }
 
-        private void printWaiterAssignment()
+        private void printWaiterAssignments()
         {
-            Dictionary<int, string> assignments = cashierView.getWaiterAssignments();
+            Dictionary<int, string> assignments = cashierView.WaiterAssignments;
             foreach ((int tableID, string waitername) in assignments)
                 Console.WriteLine($"{waitername} betjener bord {tableID}");
         }
 
         public int getWaiterAssignment(string name)
         {
-            return cashierView.getWaiterAssignments().First(x => x.Value.Equals(name)).Key;
+            return cashierView.WaiterAssignments.First(x => x.Value.Equals(name)).Key;
         }
 
 
         public int getNumberOftables()
         {
-            return cashierView.getNumberOfTables();
+            return cashierView.NumberOfTables;
         }
 
         public void Start()
@@ -98,7 +98,7 @@ namespace Bestilling.Core.Models
 
                     case "3":
                         Console.WriteLine("");
-                        printWaiterAssignment();
+                        printWaiterAssignments();
                         Console.WriteLine("Tryk Enter for at afslutte.");
                         Console.ReadKey();
                         Console.Clear();
